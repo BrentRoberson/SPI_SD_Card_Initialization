@@ -20,10 +20,20 @@
 
 const char test_string[15] PROGMEM = "Hello World!\n\r";
 
+uint8_t array[10] = {};
+uint8_t *array_ptr = array;
+
 int main(void)
 {
-	SPI_Master_Init(SPI0, 200000);
+	
+	UART_Init(UART1, 9600);
+	SPI_Master_Init(SPI0, 400000);
 	Send_Command(24, 0xFF00FF00);
+	receive_response(5,array_ptr);
+	UART_Transmit(UART1, array_ptr[0]);
+	set_error_status();
+	
+
 	
 	
 }

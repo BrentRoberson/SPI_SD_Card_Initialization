@@ -144,9 +144,23 @@
 #define CRC7_CMD8 0x87
 #define CMD0 0x40
 #define CMD8 0x48
+#define CMD16 0x50
+#define CMD55 0x77
+#define CMD58 0x7A
+#define ACMD41 0x69
 #define CPOL_BIT 0
 #define CPHA_BIT 0
 #define SD_SPI_port SPI0
+#define CMD41 ACMD41
+#define SD_CS_port (PB) //(&PINB)
+#define SD_CS_pin (1<<4)
+#define no_errors 'n'
+#define illegal_command 'i'
+#define clock_rate_error 'c'
+#define SD_timeout_error 't'
+#define SD_comm_error 'd'
+#define incompatible_voltage 'v'
+
 
 /***** Microcontroller SFR Addresses *******/
 /***** UARTS ******/
