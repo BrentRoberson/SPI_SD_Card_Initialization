@@ -140,8 +140,8 @@
 #define PORT_D1  1
 #define PORT_D0  0
 
-#define CRC7_CMD0 0x4A
-#define CRC7_CMD8 0x43
+#define CRC7_CMD0 0x94
+#define CRC7_CMD8 0x86
 #define CMD0 0x00
 #define CMD8 0x08
 #define CMD16 0x10
@@ -151,6 +151,8 @@
 #define STARTT 0x40
 #define CPOL_BIT 0
 #define CPHA_BIT 0
+
+
 #define SD_SPI_port SPI0
 #define CMD41 ACMD41
 #define SD_CS_port (PB) //(&PINB)

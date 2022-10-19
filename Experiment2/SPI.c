@@ -140,7 +140,7 @@ uint8_t receive_response(uint8_t num_bytes,uint8_t * rec_array){
 	{
 		return_value=SD_timeout_error;
 	}
-	else if((rcvd_val&0xFE)!= 0x00) // || (rcvd_val&0xFE)!= 0x01 Inside parenthesis// 0x00 and 0x01 are good values
+	else if(!((rcvd_val&0xFE)== 0x00 || (rcvd_val&0xFE)== 0x01)) //  Inside parenthesis// 0x00 and 0x01 are good values
 	{
 		*rec_array=rcvd_val; // return the value to see the error
 		return_value=SD_comm_error;
@@ -164,10 +164,11 @@ uint8_t receive_response(uint8_t num_bytes,uint8_t * rec_array){
 uint8_t SD_Init(void)
 {
 	uint32_t ACMD41_arg = 0x00000000;
+	uint8_t timeout = 0;
 	GPIO_Output_Set(SD_CS_port, SD_CS_pin);
 	for(uint8_t i = 1; i<=10; i++)
 	{
-		Send_Command(CMD0, 0xFF);
+		SPI_Transfer(SPI0, 0xFF);
 	}
 	
 	GPIO_Output_Clear(SD_CS_port, SD_CS_pin);
@@ -183,35 +184,37 @@ uint8_t SD_Init(void)
 		GPIO_Output_Set(SD_CS_port, SD_CS_pin);		if((rec_values[0]==0x01)&&(error_flag==no_errors))
 		{
 		//Check voltage compatibility:
-			if((rec_values[3]==0x01)&&(rec_values[4]==0xAA))
+			if((rec_values[0]==0x01)&&(rec_values[4]==0xAA))
 			{
 				ACMD41_arg=0x40000000; // High-Capacity Support
 				GPIO_Output_Clear(SD_CS_port,SD_CS_pin);
 				Send_Command(CMD58, 0x00);
-				receive_response(5,rec_values);
+				error_flag=receive_response(5,rec_values);
 				GPIO_Output_Set(SD_CS_port, SD_CS_pin);
 				//check R1 response is 0x01
 				if((rec_values[0]==0x01))
 				{
 					//check bit 20 and 21 in the r3 response
-					if(rec_values[3] & 0x4 || rec_values[3] & 0x5)
+					if(rec_values[2] & 0x4 || rec_values[2] & 0x5)
 					{
 						GPIO_Output_Clear(SD_CS_port,SD_CS_pin);
-						Send_Command(CMD55, 0x00);
-						receive_response(5, rec_values);
-						Send_Command(CMD41, ACMD41_arg);
-						receive_response(5, rec_values);
-						do {
-							receive_response(5, rec_values);
+
+						do 
+						{
+							Send_Command(CMD55, 0x00);
+							error_flag= receive_response(5, rec_values);
 							Send_Command(CMD41, ACMD41_arg);
-						}while(rec_values[0]!=0x00||return_value == SD_timeout_error);
+							error_flag= receive_response(5, rec_values);
+							timeout++;
+						}while(rec_values[0]!=0x00 && timeout !=0);
+						
 						if(return_value==no_errors)
 						{
 							Send_Command(CMD58, 0x00);
-							receive_response(5, rec_values);
-							if (rec_values[4] & 0x6)
+							error_flag = receive_response(5, rec_values);
+							if (rec_values[1] & 0x80)
 							{
-								if(rec_values[4] & 0x7 )
+								if(rec_values[1] & 0x40 )
 								{
 									SD_card_type = 'h';
 								}
@@ -231,7 +234,7 @@ uint8_t SD_Init(void)
 		}
 		else
 		{
-			error_status=incompatible_voltage;
+			error_status=illegal_command;
 		}
 	}	else if(rec_values[0]==0x05)
 	{
