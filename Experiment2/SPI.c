@@ -6,13 +6,14 @@
  */ 
 #include "board_struct.h"
 #include "GPIO_Outputs.h"
+#include "SPI.h"
 
 uint8_t receive_response(uint8_t num_bytes,uint8_t * rec_array);
 
 uint8_t error_flag, rcvd_val; 
 uint8_t return_value;
 uint8_t SD_card_type = ' ';
-uint8_t rec_values[5];
+
 uint8_t error_status; 
 
 //rcvd_val = SPI_Transfer(&SPI0, send_val,&error_flag)
@@ -83,7 +84,7 @@ uint8_t SPI_Transfer( volatile SPI_t * SPI_base, uint8_t send_value)
 	// Next wait in a loop until SPIF is set
 	do
 	{
-		status= SPI_base->SPSR;
+		status= (SPI_base->SPSR);
 	}while((status&0x80)==0);
 	// Then return the value from SPDR
 	return SPI_base->SPDR;
@@ -91,11 +92,10 @@ uint8_t SPI_Transfer( volatile SPI_t * SPI_base, uint8_t send_value)
 
 uint8_t Send_Command ( uint8_t command, uint32_t argument){
 	uint8_t send_value;
-	
 	if(command<64)
 	{
 		return_value = no_errors;
-		send_value = CMD0|command;
+		send_value = STARTT|command;
 		rcvd_val=SPI_Transfer(SD_SPI_port, send_value);
 	}
 	else{
@@ -140,7 +140,7 @@ uint8_t receive_response(uint8_t num_bytes,uint8_t * rec_array){
 	{
 		return_value=SD_timeout_error;
 	}
-	else if((rcvd_val&0xFE)!=0x00) // 0x00 and 0x01 are good values
+	else if((rcvd_val&0xFE)!= 0x00) // || (rcvd_val&0xFE)!= 0x01 Inside parenthesis// 0x00 and 0x01 are good values
 	{
 		*rec_array=rcvd_val; // return the value to see the error
 		return_value=SD_comm_error;
@@ -153,22 +153,33 @@ uint8_t receive_response(uint8_t num_bytes,uint8_t * rec_array){
 			for(uint8_t index=1;index<num_bytes;index++)
 			{
 				rcvd_val=SPI_Transfer(SD_SPI_port,0xFF);
-				rec_array[index]=rcvd_val;
+				*(rec_array+index)=rcvd_val;
 			}
 		}
-		rcvd_val=SPI_Transfer(SD_SPI_port,0xFF);
 	}
+	rcvd_val=SPI_Transfer(SD_SPI_port,0xFF);
 	return return_value;
 }
 
-uint8_t SD_Init(void){
+uint8_t SD_Init(void)
+{
 	uint32_t ACMD41_arg = 0x00000000;
-
+	GPIO_Output_Set(SD_CS_port, SD_CS_pin);
+	for(uint8_t i = 1; i<=10; i++)
+	{
+		Send_Command(CMD0, 0xFF);
+	}
+	
+	GPIO_Output_Clear(SD_CS_port, SD_CS_pin);
+	Send_Command(CMD0, 0x00);
+	error_status = receive_response(5, rec_values);
+	
 	if(error_status==no_errors)
 	{		GPIO_Output_Clear(SD_CS_port,SD_CS_pin);		error_flag = Send_Command(CMD8, 0x000001AA);		if(error_flag==no_errors)
 		{
 			error_flag=receive_response(5,rec_values);
 		}
+		
 		GPIO_Output_Set(SD_CS_port, SD_CS_pin);		if((rec_values[0]==0x01)&&(error_flag==no_errors))
 		{
 		//Check voltage compatibility:
@@ -183,7 +194,8 @@ uint8_t SD_Init(void){
 				if((rec_values[0]==0x01))
 				{
 					//check bit 20 and 21 in the r3 response
-					if(rec_values[3] & 0x4 || rec_values[3] & 0x5){
+					if(rec_values[3] & 0x4 || rec_values[3] & 0x5)
+					{
 						GPIO_Output_Clear(SD_CS_port,SD_CS_pin);
 						Send_Command(CMD55, 0x00);
 						receive_response(5, rec_values);
@@ -193,15 +205,18 @@ uint8_t SD_Init(void){
 							receive_response(5, rec_values);
 							Send_Command(CMD41, ACMD41_arg);
 						}while(rec_values[0]!=0x00||return_value == SD_timeout_error);
-						if(return_value==no_errors){
+						if(return_value==no_errors)
+						{
 							Send_Command(CMD58, 0x00);
 							receive_response(5, rec_values);
 							if (rec_values[4] & 0x6)
 							{
-								if(rec_values[4] & 0x7 ){
+								if(rec_values[4] & 0x7 )
+								{
 									SD_card_type = 'h';
 								}
-								else{
+								else
+								{
 									SD_card_type = 's';
 								}
 							  }
@@ -209,21 +224,21 @@ uint8_t SD_Init(void){
 						}
 					}
 				}
-				else{
-					error_status= incompatible_voltage;
-				}
-			}
 			else
 			{
-				error_status=incompatible_voltage;
+				error_status= incompatible_voltage;
 			}
-		}		else if(rec_values[0]==0x05)
+		}
+		else
 		{
-			error_status=no_errors; // if supporting older cards
-			ACMD41_arg=0x00000000; // No High-Capacity Support
-			
-		}		else
-		{
-			//Return a value that would help determine the problem
-			error_status=error_flag;
-		}		return error_status;	}	
+			error_status=incompatible_voltage;
+		}
+	}	else if(rec_values[0]==0x05)
+	{
+		error_status=no_errors; // if supporting older cards
+		ACMD41_arg=0x00000000; // No High-Capacity Support	
+	}	else
+	{
+		//Return a value that would help determine the problem
+		error_status=error_flag;
+	}	return error_status;}	

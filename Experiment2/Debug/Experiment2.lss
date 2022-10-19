@@ -3,31 +3,31 @@ Experiment2.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000002  00800100  00000446  000004da  2**0
+  0 .data         00000002  00800100  000005d2  00000666  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000446  00000000  00000000  00000094  2**1
+  1 .text         000005d2  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000013  00800102  00800102  000004dc  2**0
+  2 .bss          00000009  00800102  00800102  00000668  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000004dc  2**0
+  3 .comment      00000030  00000000  00000000  00000668  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000050c  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000698  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000c8  00000000  00000000  0000054c  2**0
+  5 .debug_aranges 000000c8  00000000  00000000  000006d8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000016c9  00000000  00000000  00000614  2**0
+  6 .debug_info   00001787  00000000  00000000  000007a0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000d50  00000000  00000000  00001cdd  2**0
+  7 .debug_abbrev 00000d79  00000000  00000000  00001f27  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000008f3  00000000  00000000  00002a2d  2**0
+  8 .debug_line   00000946  00000000  00000000  00002ca0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000016c  00000000  00000000  00003320  2**2
+  9 .debug_frame  00000174  00000000  00000000  000035e8  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000006c2  00000000  00000000  0000348c  2**0
+ 10 .debug_str    00000714  00000000  00000000  0000375c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000005a3  00000000  00000000  00003b4e  2**0
+ 11 .debug_loc    000005e4  00000000  00000000  00003e70  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000b8  00000000  00000000  000040f1  2**0
+ 12 .debug_ranges 000000b8  00000000  00000000  00004454  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -97,8 +97,8 @@ Disassembly of section .text:
   d8:	11 e0       	ldi	r17, 0x01	; 1
   da:	a0 e0       	ldi	r26, 0x00	; 0
   dc:	b1 e0       	ldi	r27, 0x01	; 1
-  de:	e6 e4       	ldi	r30, 0x46	; 70
-  e0:	f4 e0       	ldi	r31, 0x04	; 4
+  de:	e2 ed       	ldi	r30, 0xD2	; 210
+  e0:	f5 e0       	ldi	r31, 0x05	; 5
   e2:	02 c0       	rjmp	.+4      	; 0xe8 <__do_copy_data+0x10>
   e4:	05 90       	lpm	r0, Z+
   e6:	0d 92       	st	X+, r0
@@ -116,11 +116,11 @@ Disassembly of section .text:
   f6:	1d 92       	st	X+, r1
 
 000000f8 <.do_clear_bss_start>:
-  f8:	a5 31       	cpi	r26, 0x15	; 21
+  f8:	ab 30       	cpi	r26, 0x0B	; 11
   fa:	b2 07       	cpc	r27, r18
   fc:	e1 f7       	brne	.-8      	; 0xf6 <.do_clear_bss_loop>
   fe:	0e 94 95 00 	call	0x12a	; 0x12a <main>
- 102:	0c 94 21 02 	jmp	0x442	; 0x442 <_exit>
+ 102:	0c 94 e7 02 	jmp	0x5ce	; 0x5ce <_exit>
 
 00000106 <__bad_interrupt>:
  106:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -166,609 +166,853 @@ void GPIO_Output_Clear(volatile GPIO_t * port_addr, uint8_t pin_mask)
  128:	08 95       	ret
 
 0000012a <main>:
-uint8_t *array_ptr = array;
+//uint8_t array[10] = {};
+//uint8_t *array_ptr = array;
 
 int main(void)
 {
-	
+	GPIO_Output_Init(SD_CS_port, SD_CS_pin);
+ 12a:	60 e1       	ldi	r22, 0x10	; 16
+ 12c:	83 e2       	ldi	r24, 0x23	; 35
+ 12e:	90 e0       	ldi	r25, 0x00	; 0
+ 130:	0e 94 85 00 	call	0x10a	; 0x10a <GPIO_Output_Init>
 	UART_Init(UART1, 9600);
- 12a:	60 e8       	ldi	r22, 0x80	; 128
- 12c:	75 e2       	ldi	r23, 0x25	; 37
- 12e:	88 ec       	ldi	r24, 0xC8	; 200
- 130:	90 e0       	ldi	r25, 0x00	; 0
- 132:	0e 94 ce 01 	call	0x39c	; 0x39c <UART_Init>
+ 134:	60 e8       	ldi	r22, 0x80	; 128
+ 136:	75 e2       	ldi	r23, 0x25	; 37
+ 138:	88 ec       	ldi	r24, 0xC8	; 200
+ 13a:	90 e0       	ldi	r25, 0x00	; 0
+ 13c:	0e 94 9b 02 	call	0x536	; 0x536 <UART_Init>
 	SPI_Master_Init(SPI0, 400000);
- 136:	40 e8       	ldi	r20, 0x80	; 128
- 138:	5a e1       	ldi	r21, 0x1A	; 26
- 13a:	66 e0       	ldi	r22, 0x06	; 6
- 13c:	70 e0       	ldi	r23, 0x00	; 0
- 13e:	8c e4       	ldi	r24, 0x4C	; 76
- 140:	90 e0       	ldi	r25, 0x00	; 0
- 142:	0e 94 be 00 	call	0x17c	; 0x17c <SPI_Master_Init>
-	Send_Command(24, 0xFF00FF00);
- 146:	40 e0       	ldi	r20, 0x00	; 0
- 148:	5f ef       	ldi	r21, 0xFF	; 255
- 14a:	ba 01       	movw	r22, r20
- 14c:	88 e1       	ldi	r24, 0x18	; 24
- 14e:	0e 94 2e 01 	call	0x25c	; 0x25c <Send_Command>
-	receive_response(5,array_ptr);
- 152:	60 91 00 01 	lds	r22, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
- 156:	70 91 01 01 	lds	r23, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
- 15a:	85 e0       	ldi	r24, 0x05	; 5
- 15c:	0e 94 7e 01 	call	0x2fc	; 0x2fc <receive_response>
-	UART_Transmit(UART1, array_ptr[0]);
- 160:	e0 91 00 01 	lds	r30, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
- 164:	f0 91 01 01 	lds	r31, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
- 168:	60 81       	ld	r22, Z
- 16a:	88 ec       	ldi	r24, 0xC8	; 200
- 16c:	90 e0       	ldi	r25, 0x00	; 0
- 16e:	0e 94 f8 01 	call	0x3f0	; 0x3f0 <UART_Transmit>
+ 140:	40 e8       	ldi	r20, 0x80	; 128
+ 142:	5a e1       	ldi	r21, 0x1A	; 26
+ 144:	66 e0       	ldi	r22, 0x06	; 6
+ 146:	70 e0       	ldi	r23, 0x00	; 0
+ 148:	8c e4       	ldi	r24, 0x4C	; 76
+ 14a:	90 e0       	ldi	r25, 0x00	; 0
+ 14c:	0e 94 af 00 	call	0x15e	; 0x15e <SPI_Master_Init>
+	SD_Init();
+ 150:	0e 94 bf 01 	call	0x37e	; 0x37e <SD_Init>
 	set_error_status();
- 172:	0e 94 c6 01 	call	0x38c	; 0x38c <set_error_status>
+ 154:	0e 94 b7 01 	call	0x36e	; 0x36e <set_error_status>
 	
 
 	
 	
 }
- 176:	80 e0       	ldi	r24, 0x00	; 0
- 178:	90 e0       	ldi	r25, 0x00	; 0
- 17a:	08 95       	ret
+ 158:	80 e0       	ldi	r24, 0x00	; 0
+ 15a:	90 e0       	ldi	r25, 0x00	; 0
+ 15c:	08 95       	ret
 
-0000017c <SPI_Master_Init>:
+0000015e <SPI_Master_Init>:
 void set_error_status(){
 	error_status= receive_response(5,rec_values);
 }
 
 uint8_t SPI_Master_Init(volatile SPI_t *SPI_base, uint32_t clock_rate)
 {
- 17c:	cf 93       	push	r28
- 17e:	df 93       	push	r29
- 180:	ec 01       	movw	r28, r24
- 182:	9a 01       	movw	r18, r20
- 184:	ab 01       	movw	r20, r22
+ 15e:	cf 93       	push	r28
+ 160:	df 93       	push	r29
+ 162:	ec 01       	movw	r28, r24
+ 164:	9a 01       	movw	r18, r20
+ 166:	ab 01       	movw	r20, r22
 	uint16_t divider = (F_CPU/F_DIV)/(clock_rate);
- 186:	60 e0       	ldi	r22, 0x00	; 0
- 188:	74 e2       	ldi	r23, 0x24	; 36
- 18a:	84 ef       	ldi	r24, 0xF4	; 244
- 18c:	90 e0       	ldi	r25, 0x00	; 0
- 18e:	0e 94 ff 01 	call	0x3fe	; 0x3fe <__udivmodsi4>
+ 168:	60 e0       	ldi	r22, 0x00	; 0
+ 16a:	74 e2       	ldi	r23, 0x24	; 36
+ 16c:	84 ef       	ldi	r24, 0xF4	; 244
+ 16e:	90 e0       	ldi	r25, 0x00	; 0
+ 170:	0e 94 c5 02 	call	0x58a	; 0x58a <__udivmodsi4>
 	if (divider<2){
- 192:	22 30       	cpi	r18, 0x02	; 2
- 194:	31 05       	cpc	r19, r1
- 196:	28 f4       	brcc	.+10     	; 0x1a2 <SPI_Master_Init+0x26>
+ 174:	22 30       	cpi	r18, 0x02	; 2
+ 176:	31 05       	cpc	r19, r1
+ 178:	28 f4       	brcc	.+10     	; 0x184 <SPI_Master_Init+0x26>
 		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|0<<0);
- 198:	80 e5       	ldi	r24, 0x50	; 80
+ 17a:	80 e5       	ldi	r24, 0x50	; 80
+ 17c:	88 83       	st	Y, r24
+		SPI_base->SPSR = 1;
+ 17e:	81 e0       	ldi	r24, 0x01	; 1
+ 180:	89 83       	std	Y+1, r24	; 0x01
+ 182:	2f c0       	rjmp	.+94     	; 0x1e2 <SPI_Master_Init+0x84>
+	}
+	else if (divider<4){
+ 184:	24 30       	cpi	r18, 0x04	; 4
+ 186:	31 05       	cpc	r19, r1
+ 188:	20 f4       	brcc	.+8      	; 0x192 <SPI_Master_Init+0x34>
+		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|0<<0);
+ 18a:	80 e5       	ldi	r24, 0x50	; 80
+ 18c:	88 83       	st	Y, r24
+		SPI_base->SPSR = 0;
+ 18e:	19 82       	std	Y+1, r1	; 0x01
+ 190:	28 c0       	rjmp	.+80     	; 0x1e2 <SPI_Master_Init+0x84>
+	}
+	else if (divider<8){
+ 192:	28 30       	cpi	r18, 0x08	; 8
+ 194:	31 05       	cpc	r19, r1
+ 196:	28 f4       	brcc	.+10     	; 0x1a2 <SPI_Master_Init+0x44>
+		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|1<<0);
+ 198:	81 e5       	ldi	r24, 0x51	; 81
  19a:	88 83       	st	Y, r24
 		SPI_base->SPSR = 1;
  19c:	81 e0       	ldi	r24, 0x01	; 1
  19e:	89 83       	std	Y+1, r24	; 0x01
- 1a0:	2f c0       	rjmp	.+94     	; 0x200 <SPI_Master_Init+0x84>
+ 1a0:	20 c0       	rjmp	.+64     	; 0x1e2 <SPI_Master_Init+0x84>
 	}
-	else if (divider<4){
- 1a2:	24 30       	cpi	r18, 0x04	; 4
+	else if (divider<16){
+ 1a2:	20 31       	cpi	r18, 0x10	; 16
  1a4:	31 05       	cpc	r19, r1
- 1a6:	20 f4       	brcc	.+8      	; 0x1b0 <SPI_Master_Init+0x34>
-		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|0<<0);
- 1a8:	80 e5       	ldi	r24, 0x50	; 80
+ 1a6:	20 f4       	brcc	.+8      	; 0x1b0 <SPI_Master_Init+0x52>
+		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|1<<0);
+ 1a8:	81 e5       	ldi	r24, 0x51	; 81
  1aa:	88 83       	st	Y, r24
 		SPI_base->SPSR = 0;
  1ac:	19 82       	std	Y+1, r1	; 0x01
- 1ae:	28 c0       	rjmp	.+80     	; 0x200 <SPI_Master_Init+0x84>
+ 1ae:	19 c0       	rjmp	.+50     	; 0x1e2 <SPI_Master_Init+0x84>
 	}
-	else if (divider<8){
- 1b0:	28 30       	cpi	r18, 0x08	; 8
+	else if (divider<32){
+ 1b0:	20 32       	cpi	r18, 0x20	; 32
  1b2:	31 05       	cpc	r19, r1
- 1b4:	28 f4       	brcc	.+10     	; 0x1c0 <SPI_Master_Init+0x44>
-		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|1<<0);
- 1b6:	81 e5       	ldi	r24, 0x51	; 81
+ 1b4:	28 f4       	brcc	.+10     	; 0x1c0 <SPI_Master_Init+0x62>
+		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|2<<0);
+ 1b6:	82 e5       	ldi	r24, 0x52	; 82
  1b8:	88 83       	st	Y, r24
 		SPI_base->SPSR = 1;
  1ba:	81 e0       	ldi	r24, 0x01	; 1
  1bc:	89 83       	std	Y+1, r24	; 0x01
- 1be:	20 c0       	rjmp	.+64     	; 0x200 <SPI_Master_Init+0x84>
+ 1be:	11 c0       	rjmp	.+34     	; 0x1e2 <SPI_Master_Init+0x84>
 	}
-	else if (divider<16){
- 1c0:	20 31       	cpi	r18, 0x10	; 16
+	else if (divider<64){
+ 1c0:	20 34       	cpi	r18, 0x40	; 64
  1c2:	31 05       	cpc	r19, r1
- 1c4:	20 f4       	brcc	.+8      	; 0x1ce <SPI_Master_Init+0x52>
-		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|1<<0);
- 1c6:	81 e5       	ldi	r24, 0x51	; 81
+ 1c4:	20 f4       	brcc	.+8      	; 0x1ce <SPI_Master_Init+0x70>
+		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|2<<0);
+ 1c6:	82 e5       	ldi	r24, 0x52	; 82
  1c8:	88 83       	st	Y, r24
 		SPI_base->SPSR = 0;
  1ca:	19 82       	std	Y+1, r1	; 0x01
- 1cc:	19 c0       	rjmp	.+50     	; 0x200 <SPI_Master_Init+0x84>
-	}
-	else if (divider<32){
- 1ce:	20 32       	cpi	r18, 0x20	; 32
- 1d0:	31 05       	cpc	r19, r1
- 1d2:	28 f4       	brcc	.+10     	; 0x1de <SPI_Master_Init+0x62>
-		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|2<<0);
- 1d4:	82 e5       	ldi	r24, 0x52	; 82
- 1d6:	88 83       	st	Y, r24
-		SPI_base->SPSR = 1;
- 1d8:	81 e0       	ldi	r24, 0x01	; 1
- 1da:	89 83       	std	Y+1, r24	; 0x01
- 1dc:	11 c0       	rjmp	.+34     	; 0x200 <SPI_Master_Init+0x84>
-	}
-	else if (divider<64){
- 1de:	20 34       	cpi	r18, 0x40	; 64
- 1e0:	31 05       	cpc	r19, r1
- 1e2:	20 f4       	brcc	.+8      	; 0x1ec <SPI_Master_Init+0x70>
-		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|2<<0);
- 1e4:	82 e5       	ldi	r24, 0x52	; 82
- 1e6:	88 83       	st	Y, r24
-		SPI_base->SPSR = 0;
- 1e8:	19 82       	std	Y+1, r1	; 0x01
- 1ea:	0a c0       	rjmp	.+20     	; 0x200 <SPI_Master_Init+0x84>
+ 1cc:	0a c0       	rjmp	.+20     	; 0x1e2 <SPI_Master_Init+0x84>
 	}
 	else if (divider<128){
- 1ec:	20 38       	cpi	r18, 0x80	; 128
- 1ee:	31 05       	cpc	r19, r1
- 1f0:	20 f4       	brcc	.+8      	; 0x1fa <SPI_Master_Init+0x7e>
+ 1ce:	20 38       	cpi	r18, 0x80	; 128
+ 1d0:	31 05       	cpc	r19, r1
+ 1d2:	20 f4       	brcc	.+8      	; 0x1dc <SPI_Master_Init+0x7e>
 		SPI_base->SPCR = ((1<<SPE)|(1<<MSTR)|(CPOL_BIT<<CPOL)| (CPHA_BIT<<CPHA)|3<<0);
- 1f2:	83 e5       	ldi	r24, 0x53	; 83
- 1f4:	88 83       	st	Y, r24
+ 1d4:	83 e5       	ldi	r24, 0x53	; 83
+ 1d6:	88 83       	st	Y, r24
 		SPI_base->SPSR = 0;
- 1f6:	19 82       	std	Y+1, r1	; 0x01
- 1f8:	03 c0       	rjmp	.+6      	; 0x200 <SPI_Master_Init+0x84>
+ 1d8:	19 82       	std	Y+1, r1	; 0x01
+ 1da:	03 c0       	rjmp	.+6      	; 0x1e2 <SPI_Master_Init+0x84>
 	}
 	else{
 		return_value = clock_rate_error;
- 1fa:	83 e6       	ldi	r24, 0x63	; 99
- 1fc:	80 93 0e 01 	sts	0x010E, r24	; 0x80010e <return_value>
+ 1dc:	83 e6       	ldi	r24, 0x63	; 99
+ 1de:	80 93 09 01 	sts	0x0109, r24	; 0x800109 <return_value>
 	}
 	if (SPI_base == SPI0){
- 200:	cc 34       	cpi	r28, 0x4C	; 76
- 202:	d1 05       	cpc	r29, r1
- 204:	59 f4       	brne	.+22     	; 0x21c <SPI_Master_Init+0xa0>
+ 1e2:	cc 34       	cpi	r28, 0x4C	; 76
+ 1e4:	d1 05       	cpc	r29, r1
+ 1e6:	59 f4       	brne	.+22     	; 0x1fe <SPI_Master_Init+0xa0>
 		GPIO_Output_Set(PB, (1<<5));
- 206:	60 e2       	ldi	r22, 0x20	; 32
- 208:	83 e2       	ldi	r24, 0x23	; 35
- 20a:	90 e0       	ldi	r25, 0x00	; 0
- 20c:	0e 94 8a 00 	call	0x114	; 0x114 <GPIO_Output_Set>
+ 1e8:	60 e2       	ldi	r22, 0x20	; 32
+ 1ea:	83 e2       	ldi	r24, 0x23	; 35
+ 1ec:	90 e0       	ldi	r25, 0x00	; 0
+ 1ee:	0e 94 8a 00 	call	0x114	; 0x114 <GPIO_Output_Set>
 		GPIO_Output_Init(PB, (1<<5));
- 210:	60 e2       	ldi	r22, 0x20	; 32
- 212:	83 e2       	ldi	r24, 0x23	; 35
- 214:	90 e0       	ldi	r25, 0x00	; 0
- 216:	0e 94 85 00 	call	0x10a	; 0x10a <GPIO_Output_Init>
- 21a:	0a c0       	rjmp	.+20     	; 0x230 <SPI_Master_Init+0xb4>
+ 1f2:	60 e2       	ldi	r22, 0x20	; 32
+ 1f4:	83 e2       	ldi	r24, 0x23	; 35
+ 1f6:	90 e0       	ldi	r25, 0x00	; 0
+ 1f8:	0e 94 85 00 	call	0x10a	; 0x10a <GPIO_Output_Init>
+ 1fc:	0a c0       	rjmp	.+20     	; 0x212 <SPI_Master_Init+0xb4>
 	}
 	else{
 		GPIO_Output_Set(PB, (1<<3));
- 21c:	68 e0       	ldi	r22, 0x08	; 8
- 21e:	83 e2       	ldi	r24, 0x23	; 35
- 220:	90 e0       	ldi	r25, 0x00	; 0
- 222:	0e 94 8a 00 	call	0x114	; 0x114 <GPIO_Output_Set>
+ 1fe:	68 e0       	ldi	r22, 0x08	; 8
+ 200:	83 e2       	ldi	r24, 0x23	; 35
+ 202:	90 e0       	ldi	r25, 0x00	; 0
+ 204:	0e 94 8a 00 	call	0x114	; 0x114 <GPIO_Output_Set>
 		GPIO_Output_Init(PB, (1<<3));
- 226:	68 e0       	ldi	r22, 0x08	; 8
- 228:	83 e2       	ldi	r24, 0x23	; 35
- 22a:	90 e0       	ldi	r25, 0x00	; 0
- 22c:	0e 94 85 00 	call	0x10a	; 0x10a <GPIO_Output_Init>
+ 208:	68 e0       	ldi	r22, 0x08	; 8
+ 20a:	83 e2       	ldi	r24, 0x23	; 35
+ 20c:	90 e0       	ldi	r25, 0x00	; 0
+ 20e:	0e 94 85 00 	call	0x10a	; 0x10a <GPIO_Output_Init>
 	}
 	if(CPOL_BIT == 0){
 		GPIO_Output_Clear(PB, (1<<7));
- 230:	60 e8       	ldi	r22, 0x80	; 128
- 232:	83 e2       	ldi	r24, 0x23	; 35
- 234:	90 e0       	ldi	r25, 0x00	; 0
- 236:	0e 94 8f 00 	call	0x11e	; 0x11e <GPIO_Output_Clear>
+ 212:	60 e8       	ldi	r22, 0x80	; 128
+ 214:	83 e2       	ldi	r24, 0x23	; 35
+ 216:	90 e0       	ldi	r25, 0x00	; 0
+ 218:	0e 94 8f 00 	call	0x11e	; 0x11e <GPIO_Output_Clear>
 		GPIO_Output_Init(PB, (1<<7));
- 23a:	60 e8       	ldi	r22, 0x80	; 128
- 23c:	83 e2       	ldi	r24, 0x23	; 35
- 23e:	90 e0       	ldi	r25, 0x00	; 0
- 240:	0e 94 85 00 	call	0x10a	; 0x10a <GPIO_Output_Init>
+ 21c:	60 e8       	ldi	r22, 0x80	; 128
+ 21e:	83 e2       	ldi	r24, 0x23	; 35
+ 220:	90 e0       	ldi	r25, 0x00	; 0
+ 222:	0e 94 85 00 	call	0x10a	; 0x10a <GPIO_Output_Init>
 		GPIO_Output_Clear(PD, (1<<7));
 		GPIO_Output_Init(PD, (1<<7));
 	}
 	return return_value;
 	
 }
- 244:	80 91 0e 01 	lds	r24, 0x010E	; 0x80010e <return_value>
- 248:	df 91       	pop	r29
- 24a:	cf 91       	pop	r28
- 24c:	08 95       	ret
+ 226:	80 91 09 01 	lds	r24, 0x0109	; 0x800109 <return_value>
+ 22a:	df 91       	pop	r29
+ 22c:	cf 91       	pop	r28
+ 22e:	08 95       	ret
 
-0000024e <SPI_Transfer>:
+00000230 <SPI_Transfer>:
 
 
 uint8_t SPI_Transfer( volatile SPI_t * SPI_base, uint8_t send_value)
 {
- 24e:	fc 01       	movw	r30, r24
+ 230:	fc 01       	movw	r30, r24
 	uint8_t status;
 	// First start a transfer by writing send_value to SPDR
 	(SPI_base->SPDR) = send_value;
- 250:	62 83       	std	Z+2, r22	; 0x02
+ 232:	62 83       	std	Z+2, r22	; 0x02
 	// Next wait in a loop until SPIF is set
 	do
 	{
-		status= SPI_base->SPSR;
- 252:	91 81       	ldd	r25, Z+1	; 0x01
+		status= (SPI_base->SPSR);
+ 234:	91 81       	ldd	r25, Z+1	; 0x01
 	}while((status&0x80)==0);
- 254:	99 23       	and	r25, r25
- 256:	ec f7       	brge	.-6      	; 0x252 <SPI_Transfer+0x4>
+ 236:	99 23       	and	r25, r25
+ 238:	ec f7       	brge	.-6      	; 0x234 <SPI_Transfer+0x4>
 	// Then return the value from SPDR
 	return SPI_base->SPDR;
- 258:	82 81       	ldd	r24, Z+2	; 0x02
+ 23a:	82 81       	ldd	r24, Z+2	; 0x02
 }
- 25a:	08 95       	ret
+ 23c:	08 95       	ret
 
-0000025c <Send_Command>:
+0000023e <Send_Command>:
 
 uint8_t Send_Command ( uint8_t command, uint32_t argument){
- 25c:	cf 92       	push	r12
- 25e:	df 92       	push	r13
- 260:	ef 92       	push	r14
- 262:	ff 92       	push	r15
- 264:	cf 93       	push	r28
- 266:	df 93       	push	r29
+ 23e:	cf 92       	push	r12
+ 240:	df 92       	push	r13
+ 242:	ef 92       	push	r14
+ 244:	ff 92       	push	r15
+ 246:	cf 93       	push	r28
+ 248:	df 93       	push	r29
 	uint8_t send_value;
-	
 	if(command<64)
- 268:	80 34       	cpi	r24, 0x40	; 64
- 26a:	80 f4       	brcc	.+32     	; 0x28c <Send_Command+0x30>
- 26c:	6a 01       	movw	r12, r20
- 26e:	7b 01       	movw	r14, r22
- 270:	d8 2f       	mov	r29, r24
+ 24a:	80 34       	cpi	r24, 0x40	; 64
+ 24c:	80 f4       	brcc	.+32     	; 0x26e <Send_Command+0x30>
+ 24e:	6a 01       	movw	r12, r20
+ 250:	7b 01       	movw	r14, r22
+ 252:	d8 2f       	mov	r29, r24
 	{
 		return_value = no_errors;
- 272:	8e e6       	ldi	r24, 0x6E	; 110
- 274:	80 93 0e 01 	sts	0x010E, r24	; 0x80010e <return_value>
-		send_value = CMD0|command;
- 278:	6d 2f       	mov	r22, r29
- 27a:	60 64       	ori	r22, 0x40	; 64
+ 254:	8e e6       	ldi	r24, 0x6E	; 110
+ 256:	80 93 09 01 	sts	0x0109, r24	; 0x800109 <return_value>
+		send_value = STARTT|command;
+ 25a:	6d 2f       	mov	r22, r29
+ 25c:	60 64       	ori	r22, 0x40	; 64
 		rcvd_val=SPI_Transfer(SD_SPI_port, send_value);
- 27c:	8c e4       	ldi	r24, 0x4C	; 76
- 27e:	90 e0       	ldi	r25, 0x00	; 0
- 280:	0e 94 27 01 	call	0x24e	; 0x24e <SPI_Transfer>
- 284:	80 93 0d 01 	sts	0x010D, r24	; 0x80010d <rcvd_val>
+ 25e:	8c e4       	ldi	r24, 0x4C	; 76
+ 260:	90 e0       	ldi	r25, 0x00	; 0
+ 262:	0e 94 18 01 	call	0x230	; 0x230 <SPI_Transfer>
+ 266:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <rcvd_val>
 	}
 	else{
 		return_value = illegal_command;
 		return return_value;
 	}
 	for(uint8_t index=0;index<4;index++)
- 288:	c0 e0       	ldi	r28, 0x00	; 0
- 28a:	1e c0       	rjmp	.+60     	; 0x2c8 <Send_Command+0x6c>
+ 26a:	c0 e0       	ldi	r28, 0x00	; 0
+ 26c:	1e c0       	rjmp	.+60     	; 0x2aa <Send_Command+0x6c>
 		return_value = no_errors;
-		send_value = CMD0|command;
+		send_value = STARTT|command;
 		rcvd_val=SPI_Transfer(SD_SPI_port, send_value);
 	}
 	else{
 		return_value = illegal_command;
- 28c:	89 e6       	ldi	r24, 0x69	; 105
- 28e:	80 93 0e 01 	sts	0x010E, r24	; 0x80010e <return_value>
+ 26e:	89 e6       	ldi	r24, 0x69	; 105
+ 270:	80 93 09 01 	sts	0x0109, r24	; 0x800109 <return_value>
 		return return_value;
- 292:	2d c0       	rjmp	.+90     	; 0x2ee <Send_Command+0x92>
+ 274:	2d c0       	rjmp	.+90     	; 0x2d0 <Send_Command+0x92>
 	}
 	for(uint8_t index=0;index<4;index++)
 	{
 		send_value=(uint8_t)(argument>>(24-(index*8)));
- 294:	23 e0       	ldi	r18, 0x03	; 3
- 296:	30 e0       	ldi	r19, 0x00	; 0
- 298:	2c 1b       	sub	r18, r28
- 29a:	31 09       	sbc	r19, r1
- 29c:	22 0f       	add	r18, r18
- 29e:	33 1f       	adc	r19, r19
- 2a0:	22 0f       	add	r18, r18
- 2a2:	33 1f       	adc	r19, r19
- 2a4:	22 0f       	add	r18, r18
- 2a6:	33 1f       	adc	r19, r19
- 2a8:	c7 01       	movw	r24, r14
- 2aa:	b6 01       	movw	r22, r12
- 2ac:	04 c0       	rjmp	.+8      	; 0x2b6 <Send_Command+0x5a>
- 2ae:	96 95       	lsr	r25
- 2b0:	87 95       	ror	r24
- 2b2:	77 95       	ror	r23
- 2b4:	67 95       	ror	r22
- 2b6:	2a 95       	dec	r18
- 2b8:	d2 f7       	brpl	.-12     	; 0x2ae <Send_Command+0x52>
+ 276:	23 e0       	ldi	r18, 0x03	; 3
+ 278:	30 e0       	ldi	r19, 0x00	; 0
+ 27a:	2c 1b       	sub	r18, r28
+ 27c:	31 09       	sbc	r19, r1
+ 27e:	22 0f       	add	r18, r18
+ 280:	33 1f       	adc	r19, r19
+ 282:	22 0f       	add	r18, r18
+ 284:	33 1f       	adc	r19, r19
+ 286:	22 0f       	add	r18, r18
+ 288:	33 1f       	adc	r19, r19
+ 28a:	c7 01       	movw	r24, r14
+ 28c:	b6 01       	movw	r22, r12
+ 28e:	04 c0       	rjmp	.+8      	; 0x298 <Send_Command+0x5a>
+ 290:	96 95       	lsr	r25
+ 292:	87 95       	ror	r24
+ 294:	77 95       	ror	r23
+ 296:	67 95       	ror	r22
+ 298:	2a 95       	dec	r18
+ 29a:	d2 f7       	brpl	.-12     	; 0x290 <Send_Command+0x52>
 		rcvd_val=SPI_Transfer(SD_SPI_port,send_value);
- 2ba:	8c e4       	ldi	r24, 0x4C	; 76
- 2bc:	90 e0       	ldi	r25, 0x00	; 0
- 2be:	0e 94 27 01 	call	0x24e	; 0x24e <SPI_Transfer>
- 2c2:	80 93 0d 01 	sts	0x010D, r24	; 0x80010d <rcvd_val>
+ 29c:	8c e4       	ldi	r24, 0x4C	; 76
+ 29e:	90 e0       	ldi	r25, 0x00	; 0
+ 2a0:	0e 94 18 01 	call	0x230	; 0x230 <SPI_Transfer>
+ 2a4:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <rcvd_val>
 	}
 	else{
 		return_value = illegal_command;
 		return return_value;
 	}
 	for(uint8_t index=0;index<4;index++)
- 2c6:	cf 5f       	subi	r28, 0xFF	; 255
- 2c8:	c4 30       	cpi	r28, 0x04	; 4
- 2ca:	20 f3       	brcs	.-56     	; 0x294 <Send_Command+0x38>
+ 2a8:	cf 5f       	subi	r28, 0xFF	; 255
+ 2aa:	c4 30       	cpi	r28, 0x04	; 4
+ 2ac:	20 f3       	brcs	.-56     	; 0x276 <Send_Command+0x38>
 		send_value=(uint8_t)(argument>>(24-(index*8)));
 		rcvd_val=SPI_Transfer(SD_SPI_port,send_value);
 	}
 	
 	// The final byte to send is determined by the CMD_value.
 	if(command==CMD0)
- 2cc:	d0 34       	cpi	r29, 0x40	; 64
- 2ce:	21 f0       	breq	.+8      	; 0x2d8 <Send_Command+0x7c>
+ 2ae:	dd 23       	and	r29, r29
+ 2b0:	21 f0       	breq	.+8      	; 0x2ba <Send_Command+0x7c>
 	{
 		send_value=CRC7_CMD0;
 	}
 	else if(command==CMD8)
- 2d0:	d8 34       	cpi	r29, 0x48	; 72
- 2d2:	21 f4       	brne	.+8      	; 0x2dc <Send_Command+0x80>
+ 2b2:	d8 30       	cpi	r29, 0x08	; 8
+ 2b4:	21 f4       	brne	.+8      	; 0x2be <Send_Command+0x80>
 	{
 		send_value=CRC7_CMD8;
- 2d4:	67 e8       	ldi	r22, 0x87	; 135
- 2d6:	03 c0       	rjmp	.+6      	; 0x2de <Send_Command+0x82>
+ 2b6:	63 e4       	ldi	r22, 0x43	; 67
+ 2b8:	03 c0       	rjmp	.+6      	; 0x2c0 <Send_Command+0x82>
 	}
 	
 	// The final byte to send is determined by the CMD_value.
 	if(command==CMD0)
 	{
 		send_value=CRC7_CMD0;
- 2d8:	65 e9       	ldi	r22, 0x95	; 149
- 2da:	01 c0       	rjmp	.+2      	; 0x2de <Send_Command+0x82>
+ 2ba:	6a e4       	ldi	r22, 0x4A	; 74
+ 2bc:	01 c0       	rjmp	.+2      	; 0x2c0 <Send_Command+0x82>
 	{
 		send_value=CRC7_CMD8;
 	}
 	else
 	{
 		send_value=0x01; // end bit only, CRC7=0
- 2dc:	61 e0       	ldi	r22, 0x01	; 1
+ 2be:	61 e0       	ldi	r22, 0x01	; 1
 	}
 	rcvd_val=SPI_Transfer(SD_SPI_port,send_value);
- 2de:	8c e4       	ldi	r24, 0x4C	; 76
- 2e0:	90 e0       	ldi	r25, 0x00	; 0
- 2e2:	0e 94 27 01 	call	0x24e	; 0x24e <SPI_Transfer>
- 2e6:	80 93 0d 01 	sts	0x010D, r24	; 0x80010d <rcvd_val>
+ 2c0:	8c e4       	ldi	r24, 0x4C	; 76
+ 2c2:	90 e0       	ldi	r25, 0x00	; 0
+ 2c4:	0e 94 18 01 	call	0x230	; 0x230 <SPI_Transfer>
+ 2c8:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <rcvd_val>
 	// Return the error flag.
 	return return_value;
- 2ea:	80 91 0e 01 	lds	r24, 0x010E	; 0x80010e <return_value>
+ 2cc:	80 91 09 01 	lds	r24, 0x0109	; 0x800109 <return_value>
 	
 }
- 2ee:	df 91       	pop	r29
- 2f0:	cf 91       	pop	r28
- 2f2:	ff 90       	pop	r15
- 2f4:	ef 90       	pop	r14
- 2f6:	df 90       	pop	r13
- 2f8:	cf 90       	pop	r12
- 2fa:	08 95       	ret
+ 2d0:	df 91       	pop	r29
+ 2d2:	cf 91       	pop	r28
+ 2d4:	ff 90       	pop	r15
+ 2d6:	ef 90       	pop	r14
+ 2d8:	df 90       	pop	r13
+ 2da:	cf 90       	pop	r12
+ 2dc:	08 95       	ret
 
-000002fc <receive_response>:
+000002de <receive_response>:
 
 uint8_t receive_response(uint8_t num_bytes,uint8_t * rec_array){
- 2fc:	0f 93       	push	r16
- 2fe:	1f 93       	push	r17
- 300:	cf 93       	push	r28
- 302:	df 93       	push	r29
- 304:	d8 2f       	mov	r29, r24
- 306:	8b 01       	movw	r16, r22
+ 2de:	0f 93       	push	r16
+ 2e0:	1f 93       	push	r17
+ 2e2:	cf 93       	push	r28
+ 2e4:	df 93       	push	r29
+ 2e6:	d8 2f       	mov	r29, r24
+ 2e8:	8b 01       	movw	r16, r22
 	return_value = no_errors;
- 308:	8e e6       	ldi	r24, 0x6E	; 110
- 30a:	80 93 0e 01 	sts	0x010E, r24	; 0x80010e <return_value>
+ 2ea:	8e e6       	ldi	r24, 0x6E	; 110
+ 2ec:	80 93 09 01 	sts	0x0109, r24	; 0x800109 <return_value>
 	uint8_t timeout = 0;
- 30e:	c0 e0       	ldi	r28, 0x00	; 0
+ 2f0:	c0 e0       	ldi	r28, 0x00	; 0
 	do
 	{
 		rcvd_val=SPI_Transfer(SD_SPI_port,0xFF); // SPI_Receive
- 310:	6f ef       	ldi	r22, 0xFF	; 255
- 312:	8c e4       	ldi	r24, 0x4C	; 76
- 314:	90 e0       	ldi	r25, 0x00	; 0
- 316:	0e 94 27 01 	call	0x24e	; 0x24e <SPI_Transfer>
- 31a:	80 93 0d 01 	sts	0x010D, r24	; 0x80010d <rcvd_val>
+ 2f2:	6f ef       	ldi	r22, 0xFF	; 255
+ 2f4:	8c e4       	ldi	r24, 0x4C	; 76
+ 2f6:	90 e0       	ldi	r25, 0x00	; 0
+ 2f8:	0e 94 18 01 	call	0x230	; 0x230 <SPI_Transfer>
+ 2fc:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <rcvd_val>
 		timeout++;
- 31e:	cf 5f       	subi	r28, 0xFF	; 255
+ 300:	cf 5f       	subi	r28, 0xFF	; 255
 	}while((rcvd_val==0xFF)&&(timeout!=0));
- 320:	8f 3f       	cpi	r24, 0xFF	; 255
- 322:	11 f4       	brne	.+4      	; 0x328 <receive_response+0x2c>
- 324:	c1 11       	cpse	r28, r1
- 326:	f4 cf       	rjmp	.-24     	; 0x310 <receive_response+0x14>
+ 302:	8f 3f       	cpi	r24, 0xFF	; 255
+ 304:	11 f4       	brne	.+4      	; 0x30a <receive_response+0x2c>
+ 306:	c1 11       	cpse	r28, r1
+ 308:	f4 cf       	rjmp	.-24     	; 0x2f2 <receive_response+0x14>
 	// Check for SPI error, timeout error or communication error
 	if(timeout==0)
- 328:	c1 11       	cpse	r28, r1
- 32a:	04 c0       	rjmp	.+8      	; 0x334 <receive_response+0x38>
+ 30a:	c1 11       	cpse	r28, r1
+ 30c:	04 c0       	rjmp	.+8      	; 0x316 <receive_response+0x38>
 	{
 		return_value=SD_timeout_error;
- 32c:	84 e7       	ldi	r24, 0x74	; 116
- 32e:	80 93 0e 01 	sts	0x010E, r24	; 0x80010e <return_value>
- 332:	25 c0       	rjmp	.+74     	; 0x37e <receive_response+0x82>
+ 30e:	84 e7       	ldi	r24, 0x74	; 116
+ 310:	80 93 09 01 	sts	0x0109, r24	; 0x800109 <return_value>
+ 314:	1e c0       	rjmp	.+60     	; 0x352 <receive_response+0x74>
 	}
-	else if((rcvd_val&0xFE)!=0x00) // 0x00 and 0x01 are good values
- 334:	98 2f       	mov	r25, r24
- 336:	9e 7f       	andi	r25, 0xFE	; 254
- 338:	31 f0       	breq	.+12     	; 0x346 <receive_response+0x4a>
+	else if((rcvd_val&0xFE)!= 0x00) // || (rcvd_val&0xFE)!= 0x01 Inside parenthesis// 0x00 and 0x01 are good values
+ 316:	98 2f       	mov	r25, r24
+ 318:	9e 7f       	andi	r25, 0xFE	; 254
+ 31a:	31 f0       	breq	.+12     	; 0x328 <receive_response+0x4a>
 	{
 		*rec_array=rcvd_val; // return the value to see the error
- 33a:	f8 01       	movw	r30, r16
- 33c:	80 83       	st	Z, r24
+ 31c:	f8 01       	movw	r30, r16
+ 31e:	80 83       	st	Z, r24
 		return_value=SD_comm_error;
- 33e:	84 e6       	ldi	r24, 0x64	; 100
- 340:	80 93 0e 01 	sts	0x010E, r24	; 0x80010e <return_value>
- 344:	1c c0       	rjmp	.+56     	; 0x37e <receive_response+0x82>
+ 320:	84 e6       	ldi	r24, 0x64	; 100
+ 322:	80 93 09 01 	sts	0x0109, r24	; 0x800109 <return_value>
+ 326:	15 c0       	rjmp	.+42     	; 0x352 <receive_response+0x74>
 	}
 	else// Receive the rest of the bytes (if there are more to receive).
 	{
 		*rec_array=rcvd_val; // first received value (R1 resp.)
- 346:	f8 01       	movw	r30, r16
- 348:	80 83       	st	Z, r24
+ 328:	f8 01       	movw	r30, r16
+ 32a:	80 83       	st	Z, r24
 		if(num_bytes>1)
- 34a:	d2 30       	cpi	r29, 0x02	; 2
- 34c:	70 f4       	brcc	.+28     	; 0x36a <receive_response+0x6e>
- 34e:	10 c0       	rjmp	.+32     	; 0x370 <receive_response+0x74>
+ 32c:	d2 30       	cpi	r29, 0x02	; 2
+ 32e:	70 f4       	brcc	.+28     	; 0x34c <receive_response+0x6e>
+ 330:	10 c0       	rjmp	.+32     	; 0x352 <receive_response+0x74>
 		{
 			for(uint8_t index=1;index<num_bytes;index++)
 			{
 				rcvd_val=SPI_Transfer(SD_SPI_port,0xFF);
- 350:	6f ef       	ldi	r22, 0xFF	; 255
- 352:	8c e4       	ldi	r24, 0x4C	; 76
- 354:	90 e0       	ldi	r25, 0x00	; 0
- 356:	0e 94 27 01 	call	0x24e	; 0x24e <SPI_Transfer>
- 35a:	80 93 0d 01 	sts	0x010D, r24	; 0x80010d <rcvd_val>
-				rec_array[index]=rcvd_val;
- 35e:	f8 01       	movw	r30, r16
- 360:	ec 0f       	add	r30, r28
- 362:	f1 1d       	adc	r31, r1
- 364:	80 83       	st	Z, r24
+ 332:	6f ef       	ldi	r22, 0xFF	; 255
+ 334:	8c e4       	ldi	r24, 0x4C	; 76
+ 336:	90 e0       	ldi	r25, 0x00	; 0
+ 338:	0e 94 18 01 	call	0x230	; 0x230 <SPI_Transfer>
+ 33c:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <rcvd_val>
+				*(rec_array+index)=rcvd_val;
+ 340:	f8 01       	movw	r30, r16
+ 342:	ec 0f       	add	r30, r28
+ 344:	f1 1d       	adc	r31, r1
+ 346:	80 83       	st	Z, r24
 	else// Receive the rest of the bytes (if there are more to receive).
 	{
 		*rec_array=rcvd_val; // first received value (R1 resp.)
 		if(num_bytes>1)
 		{
 			for(uint8_t index=1;index<num_bytes;index++)
- 366:	cf 5f       	subi	r28, 0xFF	; 255
- 368:	01 c0       	rjmp	.+2      	; 0x36c <receive_response+0x70>
- 36a:	c1 e0       	ldi	r28, 0x01	; 1
- 36c:	cd 17       	cp	r28, r29
- 36e:	80 f3       	brcs	.-32     	; 0x350 <receive_response+0x54>
-			{
+ 348:	cf 5f       	subi	r28, 0xFF	; 255
+ 34a:	01 c0       	rjmp	.+2      	; 0x34e <receive_response+0x70>
+ 34c:	c1 e0       	ldi	r28, 0x01	; 1
+ 34e:	cd 17       	cp	r28, r29
+ 350:	80 f3       	brcs	.-32     	; 0x332 <receive_response+0x54>
 				rcvd_val=SPI_Transfer(SD_SPI_port,0xFF);
-				rec_array[index]=rcvd_val;
+				*(rec_array+index)=rcvd_val;
 			}
 		}
-		rcvd_val=SPI_Transfer(SD_SPI_port,0xFF);
- 370:	6f ef       	ldi	r22, 0xFF	; 255
- 372:	8c e4       	ldi	r24, 0x4C	; 76
- 374:	90 e0       	ldi	r25, 0x00	; 0
- 376:	0e 94 27 01 	call	0x24e	; 0x24e <SPI_Transfer>
- 37a:	80 93 0d 01 	sts	0x010D, r24	; 0x80010d <rcvd_val>
 	}
+	rcvd_val=SPI_Transfer(SD_SPI_port,0xFF);
+ 352:	6f ef       	ldi	r22, 0xFF	; 255
+ 354:	8c e4       	ldi	r24, 0x4C	; 76
+ 356:	90 e0       	ldi	r25, 0x00	; 0
+ 358:	0e 94 18 01 	call	0x230	; 0x230 <SPI_Transfer>
+ 35c:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <rcvd_val>
 	return return_value;
 }
- 37e:	80 91 0e 01 	lds	r24, 0x010E	; 0x80010e <return_value>
- 382:	df 91       	pop	r29
- 384:	cf 91       	pop	r28
- 386:	1f 91       	pop	r17
- 388:	0f 91       	pop	r16
- 38a:	08 95       	ret
+ 360:	80 91 09 01 	lds	r24, 0x0109	; 0x800109 <return_value>
+ 364:	df 91       	pop	r29
+ 366:	cf 91       	pop	r28
+ 368:	1f 91       	pop	r17
+ 36a:	0f 91       	pop	r16
+ 36c:	08 95       	ret
 
-0000038c <set_error_status>:
-uint8_t rec_values[5];
+0000036e <set_error_status>:
+
 uint8_t error_status; 
 
 //rcvd_val = SPI_Transfer(&SPI0, send_val,&error_flag)
 void set_error_status(){
 	error_status= receive_response(5,rec_values);
- 38c:	60 e1       	ldi	r22, 0x10	; 16
- 38e:	71 e0       	ldi	r23, 0x01	; 1
- 390:	85 e0       	ldi	r24, 0x05	; 5
- 392:	0e 94 7e 01 	call	0x2fc	; 0x2fc <receive_response>
- 396:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <error_status>
- 39a:	08 95       	ret
+ 36e:	62 e0       	ldi	r22, 0x02	; 2
+ 370:	71 e0       	ldi	r23, 0x01	; 1
+ 372:	85 e0       	ldi	r24, 0x05	; 5
+ 374:	0e 94 6f 01 	call	0x2de	; 0x2de <receive_response>
+ 378:	80 93 07 01 	sts	0x0107, r24	; 0x800107 <error_status>
+ 37c:	08 95       	ret
 
-0000039c <UART_Init>:
+0000037e <SD_Init>:
+	rcvd_val=SPI_Transfer(SD_SPI_port,0xFF);
+	return return_value;
+}
+
+uint8_t SD_Init(void)
+{
+ 37e:	cf 93       	push	r28
+	uint32_t ACMD41_arg = 0x00000000;
+	GPIO_Output_Set(SD_CS_port, SD_CS_pin);
+ 380:	60 e1       	ldi	r22, 0x10	; 16
+ 382:	83 e2       	ldi	r24, 0x23	; 35
+ 384:	90 e0       	ldi	r25, 0x00	; 0
+ 386:	0e 94 8a 00 	call	0x114	; 0x114 <GPIO_Output_Set>
+	for(uint8_t i = 1; i<=10; i++)
+ 38a:	c1 e0       	ldi	r28, 0x01	; 1
+ 38c:	08 c0       	rjmp	.+16     	; 0x39e <SD_Init+0x20>
+	{
+		Send_Command(CMD0, 0xFF);
+ 38e:	4f ef       	ldi	r20, 0xFF	; 255
+ 390:	50 e0       	ldi	r21, 0x00	; 0
+ 392:	60 e0       	ldi	r22, 0x00	; 0
+ 394:	70 e0       	ldi	r23, 0x00	; 0
+ 396:	80 e0       	ldi	r24, 0x00	; 0
+ 398:	0e 94 1f 01 	call	0x23e	; 0x23e <Send_Command>
+
+uint8_t SD_Init(void)
+{
+	uint32_t ACMD41_arg = 0x00000000;
+	GPIO_Output_Set(SD_CS_port, SD_CS_pin);
+	for(uint8_t i = 1; i<=10; i++)
+ 39c:	cf 5f       	subi	r28, 0xFF	; 255
+ 39e:	cb 30       	cpi	r28, 0x0B	; 11
+ 3a0:	b0 f3       	brcs	.-20     	; 0x38e <SD_Init+0x10>
+	{
+		Send_Command(CMD0, 0xFF);
+	}
+	
+	GPIO_Output_Clear(SD_CS_port, SD_CS_pin);
+ 3a2:	60 e1       	ldi	r22, 0x10	; 16
+ 3a4:	83 e2       	ldi	r24, 0x23	; 35
+ 3a6:	90 e0       	ldi	r25, 0x00	; 0
+ 3a8:	0e 94 8f 00 	call	0x11e	; 0x11e <GPIO_Output_Clear>
+	Send_Command(CMD0, 0x00);
+ 3ac:	40 e0       	ldi	r20, 0x00	; 0
+ 3ae:	50 e0       	ldi	r21, 0x00	; 0
+ 3b0:	ba 01       	movw	r22, r20
+ 3b2:	80 e0       	ldi	r24, 0x00	; 0
+ 3b4:	0e 94 1f 01 	call	0x23e	; 0x23e <Send_Command>
+	error_status = receive_response(5, rec_values);
+ 3b8:	62 e0       	ldi	r22, 0x02	; 2
+ 3ba:	71 e0       	ldi	r23, 0x01	; 1
+ 3bc:	85 e0       	ldi	r24, 0x05	; 5
+ 3be:	0e 94 6f 01 	call	0x2de	; 0x2de <receive_response>
+ 3c2:	80 93 07 01 	sts	0x0107, r24	; 0x800107 <error_status>
+	
+	if(error_status==no_errors)
+ 3c6:	8e 36       	cpi	r24, 0x6E	; 110
+ 3c8:	09 f0       	breq	.+2      	; 0x3cc <SD_Init+0x4e>
+ 3ca:	a5 c0       	rjmp	.+330    	; 0x516 <__EEPROM_REGION_LENGTH__+0x116>
+	{
+		GPIO_Output_Clear(SD_CS_port,SD_CS_pin);
+ 3cc:	60 e1       	ldi	r22, 0x10	; 16
+ 3ce:	83 e2       	ldi	r24, 0x23	; 35
+ 3d0:	90 e0       	ldi	r25, 0x00	; 0
+ 3d2:	0e 94 8f 00 	call	0x11e	; 0x11e <GPIO_Output_Clear>
+		error_flag = Send_Command(CMD8, 0x000001AA);
+ 3d6:	4a ea       	ldi	r20, 0xAA	; 170
+ 3d8:	51 e0       	ldi	r21, 0x01	; 1
+ 3da:	60 e0       	ldi	r22, 0x00	; 0
+ 3dc:	70 e0       	ldi	r23, 0x00	; 0
+ 3de:	88 e0       	ldi	r24, 0x08	; 8
+ 3e0:	0e 94 1f 01 	call	0x23e	; 0x23e <Send_Command>
+ 3e4:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <error_flag>
+		if(error_flag==no_errors)
+ 3e8:	8e 36       	cpi	r24, 0x6E	; 110
+ 3ea:	39 f4       	brne	.+14     	; 0x3fa <SD_Init+0x7c>
+		{
+			error_flag=receive_response(5,rec_values);
+ 3ec:	62 e0       	ldi	r22, 0x02	; 2
+ 3ee:	71 e0       	ldi	r23, 0x01	; 1
+ 3f0:	85 e0       	ldi	r24, 0x05	; 5
+ 3f2:	0e 94 6f 01 	call	0x2de	; 0x2de <receive_response>
+ 3f6:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <error_flag>
+		}
+		
+		GPIO_Output_Set(SD_CS_port, SD_CS_pin);
+ 3fa:	60 e1       	ldi	r22, 0x10	; 16
+ 3fc:	83 e2       	ldi	r24, 0x23	; 35
+ 3fe:	90 e0       	ldi	r25, 0x00	; 0
+ 400:	0e 94 8a 00 	call	0x114	; 0x114 <GPIO_Output_Set>
+		if((rec_values[0]==0x01)&&(error_flag==no_errors))
+ 404:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <__data_end>
+ 408:	81 30       	cpi	r24, 0x01	; 1
+ 40a:	09 f0       	breq	.+2      	; 0x40e <__EEPROM_REGION_LENGTH__+0xe>
+ 40c:	80 c0       	rjmp	.+256    	; 0x50e <__EEPROM_REGION_LENGTH__+0x10e>
+ 40e:	80 91 0a 01 	lds	r24, 0x010A	; 0x80010a <error_flag>
+ 412:	8e 36       	cpi	r24, 0x6E	; 110
+ 414:	09 f0       	breq	.+2      	; 0x418 <__EEPROM_REGION_LENGTH__+0x18>
+ 416:	7b c0       	rjmp	.+246    	; 0x50e <__EEPROM_REGION_LENGTH__+0x10e>
+		{
+		//Check voltage compatibility:
+			if((rec_values[3]==0x01)&&(rec_values[4]==0xAA))
+ 418:	80 91 05 01 	lds	r24, 0x0105	; 0x800105 <__data_end+0x3>
+ 41c:	81 30       	cpi	r24, 0x01	; 1
+ 41e:	09 f0       	breq	.+2      	; 0x422 <__EEPROM_REGION_LENGTH__+0x22>
+ 420:	72 c0       	rjmp	.+228    	; 0x506 <__EEPROM_REGION_LENGTH__+0x106>
+ 422:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__data_end+0x4>
+ 426:	8a 3a       	cpi	r24, 0xAA	; 170
+ 428:	09 f0       	breq	.+2      	; 0x42c <__EEPROM_REGION_LENGTH__+0x2c>
+ 42a:	6d c0       	rjmp	.+218    	; 0x506 <__EEPROM_REGION_LENGTH__+0x106>
+			{
+				ACMD41_arg=0x40000000; // High-Capacity Support
+				GPIO_Output_Clear(SD_CS_port,SD_CS_pin);
+ 42c:	60 e1       	ldi	r22, 0x10	; 16
+ 42e:	83 e2       	ldi	r24, 0x23	; 35
+ 430:	90 e0       	ldi	r25, 0x00	; 0
+ 432:	0e 94 8f 00 	call	0x11e	; 0x11e <GPIO_Output_Clear>
+				Send_Command(CMD58, 0x00);
+ 436:	40 e0       	ldi	r20, 0x00	; 0
+ 438:	50 e0       	ldi	r21, 0x00	; 0
+ 43a:	ba 01       	movw	r22, r20
+ 43c:	8a e3       	ldi	r24, 0x3A	; 58
+ 43e:	0e 94 1f 01 	call	0x23e	; 0x23e <Send_Command>
+				receive_response(5,rec_values);
+ 442:	62 e0       	ldi	r22, 0x02	; 2
+ 444:	71 e0       	ldi	r23, 0x01	; 1
+ 446:	85 e0       	ldi	r24, 0x05	; 5
+ 448:	0e 94 6f 01 	call	0x2de	; 0x2de <receive_response>
+				GPIO_Output_Set(SD_CS_port, SD_CS_pin);
+ 44c:	60 e1       	ldi	r22, 0x10	; 16
+ 44e:	83 e2       	ldi	r24, 0x23	; 35
+ 450:	90 e0       	ldi	r25, 0x00	; 0
+ 452:	0e 94 8a 00 	call	0x114	; 0x114 <GPIO_Output_Set>
+				//check R1 response is 0x01
+				if((rec_values[0]==0x01))
+ 456:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <__data_end>
+ 45a:	81 30       	cpi	r24, 0x01	; 1
+ 45c:	09 f0       	breq	.+2      	; 0x460 <__EEPROM_REGION_LENGTH__+0x60>
+ 45e:	67 c0       	rjmp	.+206    	; 0x52e <__EEPROM_REGION_LENGTH__+0x12e>
+				{
+					//check bit 20 and 21 in the r3 response
+					if(rec_values[3] & 0x4 || rec_values[3] & 0x5)
+ 460:	80 91 05 01 	lds	r24, 0x0105	; 0x800105 <__data_end+0x3>
+ 464:	82 fd       	sbrc	r24, 2
+ 466:	03 c0       	rjmp	.+6      	; 0x46e <__EEPROM_REGION_LENGTH__+0x6e>
+ 468:	85 70       	andi	r24, 0x05	; 5
+ 46a:	09 f4       	brne	.+2      	; 0x46e <__EEPROM_REGION_LENGTH__+0x6e>
+ 46c:	60 c0       	rjmp	.+192    	; 0x52e <__EEPROM_REGION_LENGTH__+0x12e>
+					{
+						GPIO_Output_Clear(SD_CS_port,SD_CS_pin);
+ 46e:	60 e1       	ldi	r22, 0x10	; 16
+ 470:	83 e2       	ldi	r24, 0x23	; 35
+ 472:	90 e0       	ldi	r25, 0x00	; 0
+ 474:	0e 94 8f 00 	call	0x11e	; 0x11e <GPIO_Output_Clear>
+						Send_Command(CMD55, 0x00);
+ 478:	40 e0       	ldi	r20, 0x00	; 0
+ 47a:	50 e0       	ldi	r21, 0x00	; 0
+ 47c:	ba 01       	movw	r22, r20
+ 47e:	87 e3       	ldi	r24, 0x37	; 55
+ 480:	0e 94 1f 01 	call	0x23e	; 0x23e <Send_Command>
+						receive_response(5, rec_values);
+ 484:	62 e0       	ldi	r22, 0x02	; 2
+ 486:	71 e0       	ldi	r23, 0x01	; 1
+ 488:	85 e0       	ldi	r24, 0x05	; 5
+ 48a:	0e 94 6f 01 	call	0x2de	; 0x2de <receive_response>
+						Send_Command(CMD41, ACMD41_arg);
+ 48e:	40 e0       	ldi	r20, 0x00	; 0
+ 490:	50 e0       	ldi	r21, 0x00	; 0
+ 492:	60 e0       	ldi	r22, 0x00	; 0
+ 494:	70 e4       	ldi	r23, 0x40	; 64
+ 496:	89 e2       	ldi	r24, 0x29	; 41
+ 498:	0e 94 1f 01 	call	0x23e	; 0x23e <Send_Command>
+						receive_response(5, rec_values);
+ 49c:	62 e0       	ldi	r22, 0x02	; 2
+ 49e:	71 e0       	ldi	r23, 0x01	; 1
+ 4a0:	85 e0       	ldi	r24, 0x05	; 5
+ 4a2:	0e 94 6f 01 	call	0x2de	; 0x2de <receive_response>
+						do {
+							receive_response(5, rec_values);
+ 4a6:	62 e0       	ldi	r22, 0x02	; 2
+ 4a8:	71 e0       	ldi	r23, 0x01	; 1
+ 4aa:	85 e0       	ldi	r24, 0x05	; 5
+ 4ac:	0e 94 6f 01 	call	0x2de	; 0x2de <receive_response>
+							Send_Command(CMD41, ACMD41_arg);
+ 4b0:	40 e0       	ldi	r20, 0x00	; 0
+ 4b2:	50 e0       	ldi	r21, 0x00	; 0
+ 4b4:	60 e0       	ldi	r22, 0x00	; 0
+ 4b6:	70 e4       	ldi	r23, 0x40	; 64
+ 4b8:	89 e2       	ldi	r24, 0x29	; 41
+ 4ba:	0e 94 1f 01 	call	0x23e	; 0x23e <Send_Command>
+						}while(rec_values[0]!=0x00||return_value == SD_timeout_error);
+ 4be:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <__data_end>
+ 4c2:	81 11       	cpse	r24, r1
+ 4c4:	f0 cf       	rjmp	.-32     	; 0x4a6 <__EEPROM_REGION_LENGTH__+0xa6>
+ 4c6:	80 91 09 01 	lds	r24, 0x0109	; 0x800109 <return_value>
+ 4ca:	84 37       	cpi	r24, 0x74	; 116
+ 4cc:	61 f3       	breq	.-40     	; 0x4a6 <__EEPROM_REGION_LENGTH__+0xa6>
+						if(return_value==no_errors)
+ 4ce:	8e 36       	cpi	r24, 0x6E	; 110
+ 4d0:	71 f5       	brne	.+92     	; 0x52e <__EEPROM_REGION_LENGTH__+0x12e>
+						{
+							Send_Command(CMD58, 0x00);
+ 4d2:	40 e0       	ldi	r20, 0x00	; 0
+ 4d4:	50 e0       	ldi	r21, 0x00	; 0
+ 4d6:	ba 01       	movw	r22, r20
+ 4d8:	8a e3       	ldi	r24, 0x3A	; 58
+ 4da:	0e 94 1f 01 	call	0x23e	; 0x23e <Send_Command>
+							receive_response(5, rec_values);
+ 4de:	62 e0       	ldi	r22, 0x02	; 2
+ 4e0:	71 e0       	ldi	r23, 0x01	; 1
+ 4e2:	85 e0       	ldi	r24, 0x05	; 5
+ 4e4:	0e 94 6f 01 	call	0x2de	; 0x2de <receive_response>
+							if (rec_values[4] & 0x6)
+ 4e8:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__data_end+0x4>
+ 4ec:	98 2f       	mov	r25, r24
+ 4ee:	96 70       	andi	r25, 0x06	; 6
+ 4f0:	f1 f0       	breq	.+60     	; 0x52e <__EEPROM_REGION_LENGTH__+0x12e>
+							{
+								if(rec_values[4] & 0x7 )
+ 4f2:	87 70       	andi	r24, 0x07	; 7
+ 4f4:	21 f0       	breq	.+8      	; 0x4fe <__EEPROM_REGION_LENGTH__+0xfe>
+								{
+									SD_card_type = 'h';
+ 4f6:	88 e6       	ldi	r24, 0x68	; 104
+ 4f8:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 4fc:	18 c0       	rjmp	.+48     	; 0x52e <__EEPROM_REGION_LENGTH__+0x12e>
+								}
+								else
+								{
+									SD_card_type = 's';
+ 4fe:	83 e7       	ldi	r24, 0x73	; 115
+ 500:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 504:	14 c0       	rjmp	.+40     	; 0x52e <__EEPROM_REGION_LENGTH__+0x12e>
+						}
+					}
+				}
+			else
+			{
+				error_status= incompatible_voltage;
+ 506:	86 e7       	ldi	r24, 0x76	; 118
+ 508:	80 93 07 01 	sts	0x0107, r24	; 0x800107 <error_status>
+ 50c:	10 c0       	rjmp	.+32     	; 0x52e <__EEPROM_REGION_LENGTH__+0x12e>
+			}
+		}
+		else
+		{
+			error_status=incompatible_voltage;
+ 50e:	86 e7       	ldi	r24, 0x76	; 118
+ 510:	80 93 07 01 	sts	0x0107, r24	; 0x800107 <error_status>
+ 514:	0c c0       	rjmp	.+24     	; 0x52e <__EEPROM_REGION_LENGTH__+0x12e>
+		}
+	}
+	else if(rec_values[0]==0x05)
+ 516:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <__data_end>
+ 51a:	85 30       	cpi	r24, 0x05	; 5
+ 51c:	21 f4       	brne	.+8      	; 0x526 <__EEPROM_REGION_LENGTH__+0x126>
+	{
+		error_status=no_errors; // if supporting older cards
+ 51e:	8e e6       	ldi	r24, 0x6E	; 110
+ 520:	80 93 07 01 	sts	0x0107, r24	; 0x800107 <error_status>
+ 524:	04 c0       	rjmp	.+8      	; 0x52e <__EEPROM_REGION_LENGTH__+0x12e>
+		ACMD41_arg=0x00000000; // No High-Capacity Support	
+	}
+	else
+	{
+		//Return a value that would help determine the problem
+		error_status=error_flag;
+ 526:	80 91 0a 01 	lds	r24, 0x010A	; 0x80010a <error_flag>
+ 52a:	80 93 07 01 	sts	0x0107, r24	; 0x800107 <error_status>
+	}
+	return error_status;
+}
+ 52e:	80 91 07 01 	lds	r24, 0x0107	; 0x800107 <error_status>
+ 532:	cf 91       	pop	r28
+ 534:	08 95       	ret
+
+00000536 <UART_Init>:
 
 
 
 
 void UART_Init (volatile UART_t * UART_addr, uint16_t Baud_Rate)
 {
- 39c:	cf 93       	push	r28
- 39e:	df 93       	push	r29
- 3a0:	ec 01       	movw	r28, r24
+ 536:	cf 93       	push	r28
+ 538:	df 93       	push	r29
+ 53a:	ec 01       	movw	r28, r24
 	uint16_t Baud_Rate_Reload;
 	Baud_Rate_Reload = (uint16_t)(((F_CPU/F_DIV)/(8UL*(2-U2X_bit)*Baud_Rate))-1);
- 3a2:	cb 01       	movw	r24, r22
- 3a4:	a0 e0       	ldi	r26, 0x00	; 0
- 3a6:	b0 e0       	ldi	r27, 0x00	; 0
- 3a8:	88 0f       	add	r24, r24
- 3aa:	99 1f       	adc	r25, r25
- 3ac:	aa 1f       	adc	r26, r26
- 3ae:	bb 1f       	adc	r27, r27
- 3b0:	88 0f       	add	r24, r24
- 3b2:	99 1f       	adc	r25, r25
- 3b4:	aa 1f       	adc	r26, r26
- 3b6:	bb 1f       	adc	r27, r27
- 3b8:	9c 01       	movw	r18, r24
- 3ba:	ad 01       	movw	r20, r26
- 3bc:	22 0f       	add	r18, r18
- 3be:	33 1f       	adc	r19, r19
- 3c0:	44 1f       	adc	r20, r20
- 3c2:	55 1f       	adc	r21, r21
- 3c4:	22 0f       	add	r18, r18
- 3c6:	33 1f       	adc	r19, r19
- 3c8:	44 1f       	adc	r20, r20
- 3ca:	55 1f       	adc	r21, r21
- 3cc:	60 e0       	ldi	r22, 0x00	; 0
- 3ce:	74 e2       	ldi	r23, 0x24	; 36
- 3d0:	84 ef       	ldi	r24, 0xF4	; 244
- 3d2:	90 e0       	ldi	r25, 0x00	; 0
- 3d4:	0e 94 ff 01 	call	0x3fe	; 0x3fe <__udivmodsi4>
- 3d8:	21 50       	subi	r18, 0x01	; 1
- 3da:	31 09       	sbc	r19, r1
+ 53c:	cb 01       	movw	r24, r22
+ 53e:	a0 e0       	ldi	r26, 0x00	; 0
+ 540:	b0 e0       	ldi	r27, 0x00	; 0
+ 542:	88 0f       	add	r24, r24
+ 544:	99 1f       	adc	r25, r25
+ 546:	aa 1f       	adc	r26, r26
+ 548:	bb 1f       	adc	r27, r27
+ 54a:	88 0f       	add	r24, r24
+ 54c:	99 1f       	adc	r25, r25
+ 54e:	aa 1f       	adc	r26, r26
+ 550:	bb 1f       	adc	r27, r27
+ 552:	9c 01       	movw	r18, r24
+ 554:	ad 01       	movw	r20, r26
+ 556:	22 0f       	add	r18, r18
+ 558:	33 1f       	adc	r19, r19
+ 55a:	44 1f       	adc	r20, r20
+ 55c:	55 1f       	adc	r21, r21
+ 55e:	22 0f       	add	r18, r18
+ 560:	33 1f       	adc	r19, r19
+ 562:	44 1f       	adc	r20, r20
+ 564:	55 1f       	adc	r21, r21
+ 566:	60 e0       	ldi	r22, 0x00	; 0
+ 568:	74 e2       	ldi	r23, 0x24	; 36
+ 56a:	84 ef       	ldi	r24, 0xF4	; 244
+ 56c:	90 e0       	ldi	r25, 0x00	; 0
+ 56e:	0e 94 c5 02 	call	0x58a	; 0x58a <__udivmodsi4>
+ 572:	21 50       	subi	r18, 0x01	; 1
+ 574:	31 09       	sbc	r19, r1
 	
 	(UART_addr->UBBRH) = (Baud_Rate_Reload / 256);
- 3dc:	3d 83       	std	Y+5, r19	; 0x05
+ 576:	3d 83       	std	Y+5, r19	; 0x05
 	(UART_addr->UBBRL) = (Baud_Rate_Reload % 256);
- 3de:	2c 83       	std	Y+4, r18	; 0x04
+ 578:	2c 83       	std	Y+4, r18	; 0x04
 		
 	(UART_addr->UCSRA) = U2X_bit<<U2X_shift;
- 3e0:	18 82       	st	Y, r1
+ 57a:	18 82       	st	Y, r1
 	(UART_addr->UCSRC) = Asynchronous|No_Parity|One_Stop_Bit|Eight_Data_Bits;
- 3e2:	86 e0       	ldi	r24, 0x06	; 6
- 3e4:	8a 83       	std	Y+2, r24	; 0x02
+ 57c:	86 e0       	ldi	r24, 0x06	; 6
+ 57e:	8a 83       	std	Y+2, r24	; 0x02
 	(UART_addr->UCSRB) = RX_enable|TX_enable;
- 3e6:	88 e1       	ldi	r24, 0x18	; 24
- 3e8:	89 83       	std	Y+1, r24	; 0x01
+ 580:	88 e1       	ldi	r24, 0x18	; 24
+ 582:	89 83       	std	Y+1, r24	; 0x01
 }
- 3ea:	df 91       	pop	r29
- 3ec:	cf 91       	pop	r28
- 3ee:	08 95       	ret
+ 584:	df 91       	pop	r29
+ 586:	cf 91       	pop	r28
+ 588:	08 95       	ret
 
-000003f0 <UART_Transmit>:
+0000058a <__udivmodsi4>:
+ 58a:	a1 e2       	ldi	r26, 0x21	; 33
+ 58c:	1a 2e       	mov	r1, r26
+ 58e:	aa 1b       	sub	r26, r26
+ 590:	bb 1b       	sub	r27, r27
+ 592:	fd 01       	movw	r30, r26
+ 594:	0d c0       	rjmp	.+26     	; 0x5b0 <__udivmodsi4_ep>
 
-char UART_Transmit(volatile UART_t * UART_addr, char c)
-{
- 3f0:	fc 01       	movw	r30, r24
-	uint8_t status;
-	do
-	{
-		status=(UART_addr->UCSRA);
- 3f2:	90 81       	ld	r25, Z
-	} while ((status & (1 << UDRE))!=(1 << UDRE));
- 3f4:	95 ff       	sbrs	r25, 5
- 3f6:	fd cf       	rjmp	.-6      	; 0x3f2 <UART_Transmit+0x2>
-	(UART_addr->UDR) = c;
- 3f8:	66 83       	std	Z+6, r22	; 0x06
-	return 0;
-}
- 3fa:	80 e0       	ldi	r24, 0x00	; 0
- 3fc:	08 95       	ret
+00000596 <__udivmodsi4_loop>:
+ 596:	aa 1f       	adc	r26, r26
+ 598:	bb 1f       	adc	r27, r27
+ 59a:	ee 1f       	adc	r30, r30
+ 59c:	ff 1f       	adc	r31, r31
+ 59e:	a2 17       	cp	r26, r18
+ 5a0:	b3 07       	cpc	r27, r19
+ 5a2:	e4 07       	cpc	r30, r20
+ 5a4:	f5 07       	cpc	r31, r21
+ 5a6:	20 f0       	brcs	.+8      	; 0x5b0 <__udivmodsi4_ep>
+ 5a8:	a2 1b       	sub	r26, r18
+ 5aa:	b3 0b       	sbc	r27, r19
+ 5ac:	e4 0b       	sbc	r30, r20
+ 5ae:	f5 0b       	sbc	r31, r21
 
-000003fe <__udivmodsi4>:
- 3fe:	a1 e2       	ldi	r26, 0x21	; 33
- 400:	1a 2e       	mov	r1, r26
- 402:	aa 1b       	sub	r26, r26
- 404:	bb 1b       	sub	r27, r27
- 406:	fd 01       	movw	r30, r26
- 408:	0d c0       	rjmp	.+26     	; 0x424 <__udivmodsi4_ep>
+000005b0 <__udivmodsi4_ep>:
+ 5b0:	66 1f       	adc	r22, r22
+ 5b2:	77 1f       	adc	r23, r23
+ 5b4:	88 1f       	adc	r24, r24
+ 5b6:	99 1f       	adc	r25, r25
+ 5b8:	1a 94       	dec	r1
+ 5ba:	69 f7       	brne	.-38     	; 0x596 <__udivmodsi4_loop>
+ 5bc:	60 95       	com	r22
+ 5be:	70 95       	com	r23
+ 5c0:	80 95       	com	r24
+ 5c2:	90 95       	com	r25
+ 5c4:	9b 01       	movw	r18, r22
+ 5c6:	ac 01       	movw	r20, r24
+ 5c8:	bd 01       	movw	r22, r26
+ 5ca:	cf 01       	movw	r24, r30
+ 5cc:	08 95       	ret
 
-0000040a <__udivmodsi4_loop>:
- 40a:	aa 1f       	adc	r26, r26
- 40c:	bb 1f       	adc	r27, r27
- 40e:	ee 1f       	adc	r30, r30
- 410:	ff 1f       	adc	r31, r31
- 412:	a2 17       	cp	r26, r18
- 414:	b3 07       	cpc	r27, r19
- 416:	e4 07       	cpc	r30, r20
- 418:	f5 07       	cpc	r31, r21
- 41a:	20 f0       	brcs	.+8      	; 0x424 <__udivmodsi4_ep>
- 41c:	a2 1b       	sub	r26, r18
- 41e:	b3 0b       	sbc	r27, r19
- 420:	e4 0b       	sbc	r30, r20
- 422:	f5 0b       	sbc	r31, r21
+000005ce <_exit>:
+ 5ce:	f8 94       	cli
 
-00000424 <__udivmodsi4_ep>:
- 424:	66 1f       	adc	r22, r22
- 426:	77 1f       	adc	r23, r23
- 428:	88 1f       	adc	r24, r24
- 42a:	99 1f       	adc	r25, r25
- 42c:	1a 94       	dec	r1
- 42e:	69 f7       	brne	.-38     	; 0x40a <__udivmodsi4_loop>
- 430:	60 95       	com	r22
- 432:	70 95       	com	r23
- 434:	80 95       	com	r24
- 436:	90 95       	com	r25
- 438:	9b 01       	movw	r18, r22
- 43a:	ac 01       	movw	r20, r24
- 43c:	bd 01       	movw	r22, r26
- 43e:	cf 01       	movw	r24, r30
- 440:	08 95       	ret
-
-00000442 <_exit>:
- 442:	f8 94       	cli
-
-00000444 <__stop_program>:
- 444:	ff cf       	rjmp	.-2      	; 0x444 <__stop_program>
+000005d0 <__stop_program>:
+ 5d0:	ff cf       	rjmp	.-2      	; 0x5d0 <__stop_program>
