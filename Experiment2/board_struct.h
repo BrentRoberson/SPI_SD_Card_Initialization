@@ -140,26 +140,34 @@
 #define PORT_D1  1
 #define PORT_D0  0
 
-#define CRC7_CMD0 0x95
-#define CRC7_CMD8 0x87
-#define CMD0 0x40
-#define CMD8 0x48
-#define CMD16 0x50
-#define CMD55 0x77
-#define CMD58 0x7A
-#define ACMD41 0x69
+//Commands for SD Card
+#define CRC7_CMD0 0x94
+#define CRC7_CMD8 0x86
+#define CMD0 0x00
+#define CMD8 0x08
+#define CMD16 0x10
+#define CMD17 0x11
+#define CMD55 0x37
+#define CMD58 0x3A
+#define ACMD41 0x29
+#define CMD41 ACMD41
+#define STARTT 0x40
 #define CPOL_BIT 0
 #define CPHA_BIT 0
+
+//SPI Ports and Pin Mask
 #define SD_SPI_port SPI0
-#define CMD41 ACMD41
 #define SD_CS_port (PB) //(&PINB)
 #define SD_CS_pin (1<<4)
+
+//Error constants
 #define no_errors 'n'
 #define illegal_command 'i'
 #define clock_rate_error 'c'
 #define SD_timeout_error 't'
 #define SD_comm_error 'd'
 #define incompatible_voltage 'v'
+#define start_token_error 's'
 
 
 /***** Microcontroller SFR Addresses *******/
@@ -180,8 +188,6 @@ typedef struct UART
 #define UART2 ((volatile UART_t *) 0xD0)
 
 /******SPI*********/
-
-
 typedef struct SPI
 {
 	volatile uint8_t SPCR; //control register
